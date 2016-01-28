@@ -26,6 +26,15 @@
 #define GREEN_LED P1_1
 #define BLUE_LED P1_1
 #define SYSTEM_CLOCK_MHZ 24
+#elif YARDSTICK_ONE
+#define HARDWARE_LED_INIT P1DIR |= 0xF;
+#define GREEN_LED P1_1
+#define RED_LED P1_1
+#define SYSTEM_CLOCK_MHZ 24
+#define AMPLIFIER_INIT P2DIR |= 0x19;
+#define AMPLIFIER_TX_EN P2_0
+#define AMPLIFIER_RX_EN P2_4
+#define AMPLIFIER_BYPASS P2_3
 #elif SRF_ERF
 #define HARDWARE_FLOW_CONTROL_CONFIG 0x02; /* 8N1, NO flow control, high stop bit */
 #define HARDWARE_LED_INIT P1DIR |= BIT7;

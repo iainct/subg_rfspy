@@ -34,6 +34,17 @@ int main(void)
 
   // init LEDS
   HARDWARE_LED_INIT;       // see hardware.h
+#ifdef AMPLIFIER_INIT
+  // FIXME - currently we just disable the amplifiers entirely.
+  // We need to make some quite invasive changes to the code to support the amp,
+  // including turn off the RX amplifier before each send and more.
+  // See https://github.com/ecc1/rfcat/blob/master/firmware/include/cc1111rf.h#L86-L100
+  // and where those are used for more informationß
+  AMPLIFIER_INIT;
+  AMPLIFIER_TX_EN = 0;
+  AMPLIFIER_RX_EN = 0;
+  AMPLIFIER_BYPASS 1;
+#endif
   GREEN_LED = 0;
   BLUE_LED = 0;
 
@@ -49,4 +60,3 @@ int main(void)
     get_command();
   }
 }
-

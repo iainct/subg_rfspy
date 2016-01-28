@@ -61,7 +61,6 @@ To install the firmware:
 
 Shows up as a serial device on linux.
 
-
 # CCTL Support
 
 If you have [CCTL](https://github.com/oskarpearson/cctl/tree/24mhz_clock_and_erf_stick_hack)
@@ -91,3 +90,78 @@ Reset the board by disconnecting the +ve lead, and you should then see:
     ...
     Erasing page 31
     Programming complete
+
+
+# Yardstick One
+
+**NOTE** Currently the amplifier on the Yardstick One is not yet supported. This
+enables standard Yardstick one support only!
+
+The Yardstick (and other RfCat devices) use CCBootloader, which has a
+bootloader size of 0x1400.
+
+For USA pumps:
+
+    make -f Makefile.usb_ep0 BOARD_TYPE=YARDSTICK_ONE CODE_LOC=0x1400 CODE_LOC_NAME=CCBOOT
+
+For WorldWide pumps:
+
+    make -f Makefile.usb_ep0 BOARD_TYPE=YARDSTICK_ONE CODE_LOC=0x1400 CODE_LOC_NAME=CCBOOT RADIO_LOCALE=WW
+
+Once you have a compiled firmware, follow the instructions in the section 'CC-Bootloader Devices'
+
+# CC-Bootloader Devices
+
+If you have a cc-bootloader device like the Yardstick One or other RfCat device, you can
+overwrite the firmware via serial port, without the CC-Debugger. However, you need
+the 'rfcat' code to force the device into serial-port mode.
+
+First, download this file somewhere. You may also need to install the python USB
+and serial port libraries:
+
+    $ cd /tmp
+    $ git clone FIXME rfcat-tmp
+    $ sudo easy_install -Z pyusb pyserial
+
+Now install udev rules, so that you can communicate with the device:
+
+    $ cd rfcat-tmp
+    $ sudo cp etc/udev/rules.d/20-rfcat.rules /etc/udev/rules.d
+    $ sudo udevadm control --reload-rules
+
+If everything has gone well, once you plug in the Yardstick One, you will see a file called /dev/RFCAT1 or similar
+
+    $ ls -la /dev/RFCAT1
+    lrwxrwxrwx 1 root root 15 Jan 28 08:14 /dev/RFCAT1 -> bus/usb/002/101
+
+
+## Write the firmware
+
+Once you've done the above steps, you can actually write the firmware to the
+device:
+
+1. Make sure the USB device is not plugged in.
+
+2. Enable the bootloader by running rfcat:
+
+    $ cd /tmp/rfcat-tmp
+    $ ./rfcat --bootloader --force
+
+3. You should see a message saying: "No Dongle Found.  Please insert a RFCAT dongle.""
+
+4. Plug in the Dongle. If you receive this message, you can ignore it:
+
+    'NoneType' object has no attribute 'excepthook', you can ignore it.
+
+5. If all has gone well, you should see a new device, called /dev/RFCAT_BL_C,
+  /dev/RFCAT_BL_D, or /dev/RFCAT_BL_YS1
+
+    $ ls -al /dev/RF*
+    lrwxrwxrwx 1 root root 7 Jan 28 18:32 /dev/RFCAT_BL_YS1 -> ttyACM0
+
+6. Write the firmware
+
+    $ /tmp/rfcat-tmp/rfcat_bootloader /dev/RFCAT_BL_C erase_all
+    $ /tmp/rfcat-tmp/rfcat_bootloader /dev/RFCAT_BL_C download bins/RfCatChronosCCBootloader.hex
+    $ /tmp/rfcat-tmp/rfcat_bootloader /dev/RFCAT_BL_C verify bins/RfCatChronosCCBootloader.hex
+    $ /tmp/rfcat-tmp/rfcat_bootloader /dev/RFCAT_BL_C run
