@@ -1,0 +1,6 @@
+machine:
+  pre:
+    - sudo apt-get install -y sdcc
+test:
+  override:
+    - ./build-all.sh
