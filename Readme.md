@@ -63,6 +63,12 @@ To install the firmware:
 
     make -f Makefile.uart0_alt1 BOARD_TYPE=SRF_ERF install
 
+Note that the (older) ERF 0.3b is supported with:
+
+    make -f Makefile.uart0_alt1 BOARD_TYPE=SRF_ERF_03B
+    make -f Makefile.uart0_alt1 BOARD_TYPE=SRF_ERF_03B install
+
+
 # USB on support on TI cc1111 USB stick (CC1111EMK868-915) AKA "Don's Dongle"
 
     make -f Makefile.usb_ep0 install

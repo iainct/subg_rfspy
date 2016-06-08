@@ -26,6 +26,12 @@
 #define GREEN_LED P1_1
 #define BLUE_LED P1_1
 #define SYSTEM_CLOCK_MHZ 24
+#elif SRF_ERF_03B
+#define HARDWARE_FLOW_CONTROL_CONFIG 0x02; /* 8N1, NO flow control, high stop bit */
+#define HARDWARE_LED_INIT P1DIR |= BIT1;
+#define GREEN_LED P1_1
+#define BLUE_LED P1_1
+#define SYSTEM_CLOCK_MHZ 24
 #elif SRF_ERF
 #define HARDWARE_FLOW_CONTROL_CONFIG 0x02; /* 8N1, NO flow control, high stop bit */
 #define HARDWARE_LED_INIT P1DIR |= BIT7;
