@@ -16,7 +16,7 @@
 #define BIT7 0x80
 
 #ifdef RILEYLINK
-#define HARDWARE_FLOW_CONTROL_CONFIG 0xc0; /* 8N1, hw flow control, high stop bit */
+#define HARDWARE_FLOW_CONTROL_CONFIG 0x02; /* 8N1, hw flow control, high stop bit */
 #define HARDWARE_LED_INIT P0DIR |= BIT0|BIT1;
 #define GREEN_LED P0_0
 #define BLUE_LED P0_1
